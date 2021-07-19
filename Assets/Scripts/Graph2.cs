@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Graph2 : MonoBehaviour {
 
+// todo next: stopped at "4.2 Creating a Sphere"
+// https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/
 
     [SerializeField]
     Transform pointPrefab;
@@ -16,63 +18,38 @@ public class Graph2 : MonoBehaviour {
 
     void Awake () {
 
-        
-
         float step = 2f / resolution;
-        var position = Vector3.zero;
         var scale = Vector3.one * step;
 
         points = new Transform[resolution * resolution];
 
-        for (int i = 0, x = 0, z = 0; i < points.Length; i++, x++) {
+        for (int i = 0; i < points.Length; i++) {
            
-            if(x == resolution) {
-                x = 0;
-                z += 1;
-            }
-
             Transform point = Instantiate(pointPrefab);
-            points[i] = point;
-
-            //position.x = -5 + (i + 0.5f) * 10 * step - 1f;
-            position.x = (x + 0.5f) * step - 1f;
-            position.z = (z + 0.5f) * step - 1f;
-            
-            //will do this in the update method
-            //position.y = Mathf.Sin(position.x * position.x);
-            //position.y = position.x * position.x * position.x;
-            point.localPosition = position;
             point.localScale = scale;
-            
-            point.SetParent(transform, false);
+		    point.SetParent(transform, false);
+		    points[i] = point;
 
         }
 
 
     }
 
-    void Update() {
-
-        FunctionLibrary.Function f = FunctionLibrary.GetFunction(function);
-
-        // optimized by keeping out of the loop
-        float time = Time.time;
-
-         for (int i = 0; i < points.Length; i++) {
-
-             Transform point = points[i];
-             Vector3 position = point.localPosition;
-
-            position.y = f(position.x, position.z, time);
-             
-             //NOTE that localposition is a property, not a public field. 
-             //that's why have to do it this way
-             point.localPosition = position;
-
-
-         }
-
-    }
+    void Update () {
+		FunctionLibrary.Function f = FunctionLibrary.GetFunction(function);
+		float time = Time.time;
+		float step = 2f / resolution;
+        float v = 0.5f * step - 1f;
+		for (int i = 0, x = 0, z = 0; i < points.Length; i++, x++) {
+			if (x == resolution) {
+				x = 0;
+				z += 1;
+                v = (z + 0.5f) * step - 1f;
+			}
+			float u = (x + 0.5f) * step - 1f;
+			points[i].localPosition = f(u, v, time);
+		}
+	}
 
 
 }
