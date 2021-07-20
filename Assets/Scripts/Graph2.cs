@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Graph2 : MonoBehaviour {
 
-// todo next: stopped at "4.2 Creating a Sphere"
+// todo next: stopped at "4.3 Perturbing the Sphere"
+// From tutorial at:
 // https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/
 
     [SerializeField]

@@ -8,9 +8,9 @@ public static class FunctionLibrary {
 
     public delegate Vector3 Function (float u, float v, float t);
 
-    public enum FunctionName { Wave, MultiWave, Ripple }
+    public enum FunctionName { Wave, MultiWave, Ripple, AirnSphere, Sphere, Torus }
 
-    static Function[] functions = { Wave, MultiWave, Ripple };
+    static Function[] functions = { Wave, MultiWave, Ripple, AirnSphere, Sphere, Torus };
 
     public static Function GetFunction (FunctionName name) {
        return functions[(int)name];
@@ -46,5 +46,45 @@ public static class FunctionLibrary {
 	}
 
 
+  public static Vector3 AirnSphere (float u, float v, float t) {
+    // scaling based on time:
+    //float r = 0.5f + 0.5f * Sin(PI * t);
+
+    float r = 0.9f + 0.1f * Sin(8f * PI * v + t);
+ 		float s = r * Cos(0.5f * PI * v);
+    Vector3 p;
+    p.x = s * Sin(PI * u * t + (PI * Sin(PI)));
+    p.y = r * Sin(PI * 0.5f * v + t);
+    p.z = s * Cos(PI * u) - Sin(PI * v);
+    // p.z = s * Cos(PI * u);
+    return p;
+  }
+
+ public static Vector3 Sphere (float u, float v, float t) {
+    // scaling size based on time:
+    //float r = 0.5f + 0.5f * Sin(PI * t);
+
+    float r = 0.9f + 0.1f * Sin(PI * (6f * u + 4f * v + t));
+ 		float s = r * Cos(0.5f * PI * v);
+    Vector3 p;
+    p.x = s * Sin(PI * u);
+    p.y = r * Sin(0.5f * PI * v);
+    p.z = s * Cos(PI * u);
+    return p;
+  }
+
+
+   public static Vector3 Torus (float u, float v, float t) {
+  
+    
+    float r1 = 0.7f + 0.1f * Sin(PI * (6f * u + 0.5f * t));
+		float r2 = 0.15f + 0.05f * Sin(PI * (8f * u + 4f * v + 2f * t));
+ 		float s = r1 + r2 * Cos(PI * v);
+    Vector3 p;
+    p.x = s * Sin(PI * u);
+    p.y = r2 * Sin(PI * v);
+    p.z = s * Cos(PI * u);
+    return p;
+  }
 
 }
