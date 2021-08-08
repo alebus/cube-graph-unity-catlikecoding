@@ -87,4 +87,35 @@ public static class FunctionLibrary {
     return p;
   }
 
+  public static FunctionName GetNextFunctionName (FunctionName name) {
+    
+    // could also do this instead - ternary:
+    // note both alternatives must return a value of the same type
+    // return (int)name < functions.Length - 1 ? name + 1 : 0;
+    
+      if ((int)name < functions.Length - 1) {
+        return name + 1;
+      }
+      else {
+        return 0;
+      }
+  }
+
+  public static FunctionName GetRandomFunctionNameOtherThan (FunctionName name) {
+      var choice = (FunctionName)Random.Range(1, functions.Length);
+      return choice == name ? 0 : choice;
+  }
+
+
+  public static Vector3 Morph (
+		float u, float v, float t, Function from, Function to, float progress
+	) {
+
+    return Vector3.LerpUnclamped(
+		  from(u, v, t), to(u, v, t), SmoothStep(0f, 1f, progress)
+		);
+  }
+
+
+
 }
